@@ -1,0 +1,39 @@
+name: Runtime defect
+about: Report a reproducible WCM Core runtime or integration defect
+title: "[runtime] "
+labels: [bug]
+body:
+  - type: input
+    id: version
+    attributes:
+      label: WCM version / ABI
+      placeholder: 1.1.0 / 0x0101
+    validations:
+      required: true
+  - type: input
+    id: profile
+    attributes:
+      label: Profile and compiler
+      placeholder: STANDARD, arm-none-eabi-gcc 14.x
+    validations:
+      required: true
+  - type: textarea
+    id: contract
+    attributes:
+      label: Affected contract
+      description: Timing, authority, continuity, ingress, persistence, diagnostics, or port behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Minimal reproduction
+      description: Include the smallest configuration and event sequence that reproduces the issue.
+    validations:
+      required: true
+  - type: textarea
+    id: observed
+    attributes:
+      label: Observed and expected behavior
+    validations:
+      required: true

@@ -1,0 +1,19 @@
+{
+  "runtime_version": "1.1.0",
+  "abi_version": "0x0101",
+  "profile": "STANDARD",
+  "deployment_id": "product-line/control-domain/0001",
+  "config_revision": 1,
+  "config_fingerprint": "0x0000000000000000",
+  "config_fingerprint_version": 1,
+  "anchor_format_version": 2,
+  "build_tag": "release",
+  "target": "integration-defined",
+  "toolchain": "integration-defined",
+  "source_archive_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "qualification": {
+    "status": "not-qualified",
+    "record": "docs/QUALIFICATION.md",
+    "date": "2026-08-11"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": { "major": 3, "minor": 20, "patch": 0 },
+  "configurePresets": [
+    {
+      "name": "release",
+      "displayName": "Release / STANDARD",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "WCM_PROFILE": "STANDARD",
+        "WCM_BUILD_TESTS": "ON",
+        "WCM_BUILD_REFERENCE": "ON"
+      }
+    },
+    {
+      "name": "tiny",
+      "inherits": "release",
+      "displayName": "Release / TINY",
+      "binaryDir": "${sourceDir}/build/tiny",
+      "cacheVariables": { "WCM_PROFILE": "TINY" }
+    },
+    {
+      "name": "extended",
+      "inherits": "release",
+      "displayName": "Release / EXTENDED",
+      "binaryDir": "${sourceDir}/build/extended",
+      "cacheVariables": { "WCM_PROFILE": "EXTENDED" }
+    },
+    {
+      "name": "asan",
+      "inherits": "release",
+      "displayName": "Debug / ASan+UBSan",
+      "binaryDir": "${sourceDir}/build/asan",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "WCM_ENABLE_SANITIZERS": "ON"
+      }
+    }
+  ],
+  "buildPresets": [
+    { "name": "release", "configurePreset": "release" },
+    { "name": "tiny", "configurePreset": "tiny" },
+    { "name": "extended", "configurePreset": "extended" },
+    { "name": "asan", "configurePreset": "asan" }
+  ],
+  "testPresets": [
+    { "name": "release", "configurePreset": "release", "output": { "outputOnFailure": true } },
+    { "name": "asan", "configurePreset": "asan", "output": { "outputOnFailure": true } }
+  ]
+}

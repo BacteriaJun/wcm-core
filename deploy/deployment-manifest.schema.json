@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:wcm-core:deployment-manifest:1.1",
+  "title": "WCM Core deployment manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "runtime_version",
+    "abi_version",
+    "profile",
+    "deployment_id",
+    "config_revision",
+    "config_fingerprint",
+    "anchor_format_version",
+    "config_fingerprint_version",
+    "toolchain",
+    "qualification"
+  ],
+  "properties": {
+    "runtime_version": {
+      "type": "string"
+    },
+    "abi_version": {
+      "type": "string"
+    },
+    "profile": {
+      "enum": [
+        "TINY",
+        "STANDARD",
+        "EXTENDED"
+      ]
+    },
+    "deployment_id": {
+      "type": "string"
+    },
+    "config_revision": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "config_fingerprint": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{16}$"
+    },
+    "build_tag": {
+      "type": "string"
+    },
+    "target": {
+      "type": "string"
+    },
+    "toolchain": {
+      "type": "string"
+    },
+    "source_archive_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{64}$"
+    },
+    "qualification": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "status"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "qualified",
+            "conditional",
+            "not-qualified"
+          ]
+        },
+        "record": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    },
+    "config_fingerprint_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "anchor_format_version": {
+      "type": "integer",
+      "minimum": 1
+    }
+  }
+}

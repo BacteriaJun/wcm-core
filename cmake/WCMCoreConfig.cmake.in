@@ -1,0 +1,7 @@
+@PACKAGE_INIT@
+include(CMakeFindDependencyMacro)
+if(@WCM_CONFIG_HAS_POSIX_PORT@)
+  find_dependency(Threads)
+endif()
+include("${CMAKE_CURRENT_LIST_DIR}/WCMCoreTargets.cmake")
+check_required_components(WCMCore)

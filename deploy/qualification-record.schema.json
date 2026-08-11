@@ -1,0 +1,332 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:wcm-core:qualification-record:1.1",
+  "title": "WCM Core target qualification record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "runtime_version",
+    "abi_version",
+    "profile",
+    "deployment_id",
+    "config_revision",
+    "config_fingerprint",
+    "anchor_format_version",
+    "config_fingerprint_version",
+    "build",
+    "clock",
+    "modules",
+    "actuators",
+    "ingress",
+    "safe_state",
+    "verification",
+    "disposition"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "runtime_version": {
+      "type": "string"
+    },
+    "abi_version": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{4}$"
+    },
+    "profile": {
+      "enum": [
+        "TINY",
+        "STANDARD",
+        "EXTENDED"
+      ]
+    },
+    "deployment_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "config_revision": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "config_fingerprint": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{16}$"
+    },
+    "build": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "toolchain",
+        "compiler_flags",
+        "build_tag",
+        "runtime_storage_bytes"
+      ],
+      "properties": {
+        "toolchain": {
+          "type": "string"
+        },
+        "compiler_flags": {
+          "type": "string"
+        },
+        "build_tag": {
+          "type": "string"
+        },
+        "runtime_storage_bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "source_archive_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{64}$"
+        }
+      }
+    },
+    "clock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "resolution_us",
+        "uncertainty_us",
+        "monotonicity_test",
+        "failure_injection"
+      ],
+      "properties": {
+        "resolution_us": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "uncertainty_us": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "monotonicity_test": {
+          "enum": [
+            "pass",
+            "fail",
+            "not-run"
+          ]
+        },
+        "failure_injection": {
+          "enum": [
+            "pass",
+            "fail",
+            "not-run"
+          ]
+        }
+      }
+    },
+    "modules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "declared_wcet_us",
+          "observed_max_us",
+          "method",
+          "result"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 65535
+          },
+          "declared_wcet_us": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "observed_max_us": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "method": {
+            "type": "string"
+          },
+          "result": {
+            "enum": [
+              "pass",
+              "fail",
+              "conditional"
+            ]
+          }
+        }
+      }
+    },
+    "actuators": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "dispatch_wcet_us",
+          "observed_dispatch_max_us",
+          "effect_latency_us",
+          "result"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 63
+          },
+          "dispatch_wcet_us": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "observed_dispatch_max_us": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "effect_latency_us": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "result": {
+            "enum": [
+              "pass",
+              "fail",
+              "conditional"
+            ]
+          }
+        }
+      }
+    },
+    "ingress": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "producer_count",
+        "burst_observations",
+        "overflow_behavior"
+      ],
+      "properties": {
+        "producer_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "burst_observations": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "overflow_behavior": {
+          "type": "string"
+        }
+      }
+    },
+    "safe_state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "startup",
+        "world_break",
+        "controlled_stop",
+        "brownout",
+        "watchdog_reset"
+      ],
+      "properties": {
+        "startup": {
+          "enum": [
+            "pass",
+            "fail",
+            "not-run"
+          ]
+        },
+        "world_break": {
+          "enum": [
+            "pass",
+            "fail",
+            "not-run"
+          ]
+        },
+        "controlled_stop": {
+          "enum": [
+            "pass",
+            "fail",
+            "not-run"
+          ]
+        },
+        "brownout": {
+          "enum": [
+            "pass",
+            "fail",
+            "not-run"
+          ]
+        },
+        "watchdog_reset": {
+          "enum": [
+            "pass",
+            "fail",
+            "not-run"
+          ]
+        }
+      }
+    },
+    "verification": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "result",
+          "evidence"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "result": {
+            "enum": [
+              "pass",
+              "fail",
+              "not-run"
+            ]
+          },
+          "evidence": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "disposition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "owner",
+        "date"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "qualified",
+            "conditional",
+            "not-qualified"
+          ]
+        },
+        "owner": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "config_fingerprint_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "anchor_format_version": {
+      "type": "integer",
+      "minimum": 1
+    }
+  }
+}

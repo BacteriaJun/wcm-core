@@ -1,0 +1,10 @@
+prefix=${pcfiledir}/../..
+exec_prefix=${prefix}
+libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
+includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
+
+Name: WCM Core
+Description: Witness-Commit embedded control runtime
+Version: @PROJECT_VERSION@
+Libs: -L${libdir} -lwcm_core
+Cflags: -I${includedir} -DWCM_PROFILE=@WCM_PROFILE_DEFINE@

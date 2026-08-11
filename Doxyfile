@@ -1,0 +1,10 @@
+PROJECT_NAME           = "WCM Core"
+PROJECT_NUMBER         = "1.1.0"
+OUTPUT_DIRECTORY       = build/docs
+INPUT                  = include/wcm docs
+RECURSIVE              = YES
+EXTRACT_ALL            = YES
+QUIET                  = YES
+WARN_IF_UNDOCUMENTED   = NO
+GENERATE_HTML           = YES
+GENERATE_LATEX          = NO

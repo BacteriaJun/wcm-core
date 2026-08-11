@@ -1,0 +1,10 @@
+Checks: >-
+  -*,
+  clang-analyzer-*,
+  bugprone-*,
+  performance-*,
+  portability-*,
+  readability-avoid-const-params-in-decls
+WarningsAsErrors: ''
+HeaderFilterRegex: '^(include|src|ports)/'
+FormatStyle: file

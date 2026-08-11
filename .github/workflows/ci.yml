@@ -1,0 +1,87 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-test:
+    strategy:
+      matrix:
+        compiler: [gcc, clang]
+        profile: [TINY, STANDARD, EXTENDED]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure
+        env:
+          CC: ${{ matrix.compiler }}
+        run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DWCM_PROFILE=${{ matrix.profile }}
+      - name: Build
+        run: cmake --build build
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
+      - name: Size report
+        run: ./build/wcm_size_report
+
+  sanitizers:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: ASan and UBSan
+        run: |
+          cmake -S . -B build-asan -G Ninja -DWCM_ENABLE_SANITIZERS=ON -DCMAKE_BUILD_TYPE=Debug
+          cmake --build build-asan
+          ctest --test-dir build-asan --output-on-failure
+      - name: ThreadSanitizer
+        run: |
+          cmake -S . -B build-tsan -G Ninja -DWCM_ENABLE_TSAN=ON -DWCM_BUILD_REFERENCE=OFF -DCMAKE_BUILD_TYPE=Debug
+          cmake --build build-tsan
+          ctest --test-dir build-tsan --output-on-failure
+
+  hardening:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: cmake -S . -B build-hard -G Ninja -DCMAKE_BUILD_TYPE=Release -DWCM_ENABLE_HARDENING=ON
+      - run: cmake --build build-hard
+      - run: ctest --test-dir build-hard --output-on-failure
+
+  public-api-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: ./scripts/audit.sh
+
+  deployment-records:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m pip install 'jsonschema>=4,<5'
+      - run: ./scripts/validate_deploy_records.py
+
+  analyzer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: ./scripts/analyze.sh
+
+  install-consumer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure standard build
+        run: cmake -S . -B build-gcc-standard -G Ninja -DCMAKE_BUILD_TYPE=Release -DWCM_PROFILE=STANDARD
+      - name: Build
+        run: cmake --build build-gcc-standard
+      - name: Install and consume
+        run: ./scripts/check_install.sh
+
+  source-package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Package
+        run: ./scripts/package.sh "$RUNNER_TEMP/WCM-Core-1.1.zip"
+      - name: Rebuild packaged source
+        run: ./scripts/verify_archive.sh "$RUNNER_TEMP/WCM-Core-1.1.zip"
